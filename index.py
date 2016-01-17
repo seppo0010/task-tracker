@@ -55,7 +55,7 @@ class Task(object):
                 self.name,
                 ' (' + range_string + ')' if range_string is not None else '',
                 '\n',
-                '\n'.join(tasks[t].task_view(tasks, indentation + 1) for t in self.dependencies)
+                '\n'.join(tasks[t].task_view(tasks, indentation + 1) for t in self.dependencies if not tasks[t].done)
                 ))
 
     def __repr__(self):
@@ -72,7 +72,7 @@ def parse_csv(path):
 
 def show_available(tasks):
     for task in tasks.values():
-        if task.is_available(tasks):
+        if task.is_available(tasks) and not task.done:
             print task.task_view(tasks)
 
 def show_deadlines(tasks):
