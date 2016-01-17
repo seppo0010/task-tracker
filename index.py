@@ -24,6 +24,7 @@ class Task(object):
         self.start_date = parse_date(row[3]) if len(row) > 3 and len(row[3]) > 0 else None
         self.end_date = parse_date(row[4]) if len(row) > 4 and len(row[4]) > 0 else None
         self.dependencies = row[5].split(',') if len(row) > 5 and len(row[5]) > 0 else []
+        self.details = row[6] if len(row) > 6 else ''
 
     def is_available(self, tasks):
         if self.start_date is not None or self.start_date > time.time():
@@ -55,6 +56,7 @@ class Task(object):
                 self.name,
                 ' (' + range_string + ')' if range_string is not None else '',
                 '\n',
+                ' ' * indentation * 2 + self.details + '\n' if len(self.details) > 0 else '',
                 '\n'.join(tasks[t].task_view(tasks, indentation + 1) for t in self.dependencies if not tasks[t].done)
                 ))
 
